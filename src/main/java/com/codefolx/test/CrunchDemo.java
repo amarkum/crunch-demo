@@ -20,31 +20,26 @@ public class CrunchDemo {
         Pipeline pipeline = getPipeline(configuration);
 
         //Read PCollection of String from Text file.
-        PCollection person_data = pipeline.readTextFile(inputPath);
+        PCollection personDataEachLine = pipeline.readTextFile(inputPath);
 
         //Create a PCollection of Person record.
-        PCollection <Person> person_record = person_data.parallelDo(DoFn_CreatePojo(), Avros.records(Person.class));
-
-        // Materialize PCollection
-        for (Person person : person_record.materialize()){
-            System.out.println(person.getName()+" lives in "+person.getCity()+" city ");
-        }
+        PCollection personRecord = personDataEachLine.parallelDo(DoFnCreatePojo(), Avros.records(Person.class));
 
         //Write collection to avro file.
-        person_record.write(To.avroFile(outputPath));
+        personRecord.write(To.avroFile(outputPath));
 
         PipelineResult result = pipeline.done();
         System.exit(result.succeeded() ? 0 : 1);
     }
 
-    static DoFn < String, Person > DoFn_CreatePojo() {
-        return new DoFn < String, Person > () {
+    public static DoFn<String, Person> DoFnCreatePojo() {
+        return new DoFn<String, Person>() {
             @Override
-            public void process(String input, Emitter < Person > emitter) {
-                String input_parts[] = input.split(",");
-                String name = input_parts[0];
-                String roll = input_parts[1];
-                String city = input_parts[2];
+            public void process(String input, Emitter<Person> emitter) {
+                String inputParts[] = input.split(",");
+                String name = inputParts[0];
+                String roll = inputParts[1];
+                String city = inputParts[2];
                 emitter.emit(new Person(name, roll, city));
             }
         };

@@ -1,6 +1,11 @@
 package com.codefolx.test;
 
 public class Person {
+
+    String name;
+    String roll;
+    String city;
+
     public String getName() {
         return name;
     }
@@ -30,8 +35,4 @@ public class Person {
         this.roll = roll;
         this.city = city;
     }
-
-    String name;
-    String roll;
-    String city;
 }
