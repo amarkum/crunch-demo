@@ -6,8 +6,6 @@ import org.apache.crunch.io.To;
 import org.apache.crunch.types.avro.Avros;
 import org.apache.hadoop.conf.Configuration;
 
-import java.util.Arrays;
-
 public class SplitWiseRecordToHDFS {
     public static void main(String[] args) {
 
@@ -25,7 +23,7 @@ public class SplitWiseRecordToHDFS {
         PCollection splitWiseEntryCommaSeparated = pipeline.readTextFile(inputPath);
 
         //Create a PCollection of Person record.
-        PCollection personRecord = splitWiseEntryCommaSeparated.parallelDo(DoFnCreateSplitWiseRecord(), Avros.records(SplitWiseRecord.class));
+        PCollection personRecord = splitWiseEntryCommaSeparated.parallelDo(DoFnCreateSplitWiseRecord(),  Avros.records(SplitWiseRecord.class));
 
         //Write collection to avro file.
         personRecord.write(To.avroFile(outputPath), Target.WriteMode.OVERWRITE);
@@ -54,6 +52,6 @@ public class SplitWiseRecordToHDFS {
 
     public static Pipeline getPipeline(final Configuration conf) {
         conf.setBoolean("mapred.output.compress", false);
-        return new MRPipeline(Person.class, conf);
+        return new MRPipeline(SplitWiseRecord.class, conf);
     }
 }

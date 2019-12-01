@@ -1,6 +1,12 @@
 package com.codefolx.test;
 
-public class SplitWiseRecord {
+import org.apache.hadoop.io.WritableComparable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+public class SplitWiseRecord  {
 
     String date;
     String description;
@@ -21,4 +27,5 @@ public class SplitWiseRecord {
         this.roomMate2 = roomMate2;
         this.roomMate3 = roomMate3;
     }
+
 }
